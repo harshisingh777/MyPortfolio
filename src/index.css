@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper text-ink font-body antialiased;
+    font-size: 16px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+  }
+
+  ::selection {
+    background-color: #ff5a5f;
+    color: #ffffff;
+  }
+
+  /* Visible keyboard focus everywhere — accessibility floor */
+  :focus-visible {
+    outline: 2px solid #0057ff;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/80 backdrop-blur-xl border border-white/60 shadow-glass;
+  }
+
+  .glass-nav {
+    @apply bg-white/70 backdrop-blur-xl border border-white/50;
+  }
+
+  .eyebrow {
+    @apply font-body text-xs tracking-[0.2em] uppercase text-ink/50 font-medium;
+  }
+
+  .section-number {
+    @apply font-display text-coral/70 text-sm tracking-[0.15em];
+  }
+}
+
+/* Hide native cursor for the custom cursor effect on fine-pointer devices only */
+@media (hover: hover) and (pointer: fine) {
+  body {
+    cursor: none;
+  }
+  a,
+  button,
+  [role="button"] {
+    cursor: none;
+  }
+}
