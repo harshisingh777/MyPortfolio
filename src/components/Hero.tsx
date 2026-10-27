@@ -3,7 +3,7 @@ import SignalScatter from "./SignalScatter";
 import { Counter, EASE } from "./ui";
 import { headlineStats, profile } from "../data/resume";
 
-export default function Hero() {
+export default function Hero({ ready }: { ready: boolean }) {
   return (
     <section id="top" className="relative w-full overflow-hidden px-5 pb-16 pt-28 md:px-10 md:pt-32">
       {/* soft signal glow behind the figure */}
@@ -16,7 +16,7 @@ export default function Hero() {
       <div className="relative mx-auto max-w-[1400px]">
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          animate={ready ? { opacity: 1 } : undefined}
           transition={{ duration: 0.8, delay: 0.1 }}
           className="label mb-6 flex flex-wrap items-center gap-x-6 gap-y-2 md:mb-4"
         >
@@ -36,7 +36,7 @@ export default function Hero() {
                 <motion.span
                   className={"inline-block " + (i === 1 ? "pl-[12vw] italic lg:pl-[7vw] 2xl:pl-[7.5rem]" : "")}
                   initial={{ y: "110%" }}
-                  animate={{ y: "0%" }}
+                  animate={ready ? { y: "0%" } : undefined}
                   transition={{ duration: 1.05, delay: 0.15 + i * 0.12, ease: EASE }}
                 >
                   {word}
@@ -48,7 +48,7 @@ export default function Hero() {
 
           <motion.figure
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={ready ? { opacity: 1, y: 0 } : undefined}
             transition={{ duration: 1, delay: 0.45, ease: EASE }}
             className="relative lg:col-span-6"
           >
@@ -61,7 +61,7 @@ export default function Hero() {
                 r = 0.97 · p &lt; 0.001
               </div>
               <div className="absolute inset-0 pt-6">
-                <SignalScatter />
+                {ready && <SignalScatter />}
               </div>
             </div>
             <figcaption className="mt-3 flex justify-between font-mono text-[10px] text-bone-mute">
@@ -75,7 +75,7 @@ export default function Hero() {
         <div className="mt-12 grid grid-cols-1 items-end gap-8 md:grid-cols-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={ready ? { opacity: 1, y: 0 } : undefined}
             transition={{ duration: 0.8, delay: 0.6, ease: EASE }}
             className="md:col-span-7"
           >
@@ -87,7 +87,7 @@ export default function Hero() {
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={ready ? { opacity: 1, y: 0 } : undefined}
             transition={{ duration: 0.8, delay: 0.7, ease: EASE }}
             className="md:col-span-5 md:flex md:justify-end"
           >
@@ -112,7 +112,7 @@ export default function Hero() {
 
         <motion.dl
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          animate={ready ? { opacity: 1 } : undefined}
           transition={{ duration: 0.8, delay: 1 }}
           className="mt-16 grid grid-cols-2 border-t border-line md:grid-cols-4"
         >
@@ -128,7 +128,12 @@ export default function Hero() {
               }
             >
               <dd className="font-serif text-4xl text-bone md:text-5xl">
-                <Counter value={s.value} decimals={s.decimals} prefix={s.prefix} suffix={s.suffix} />
+                {/* mount after the intro so the count-up is actually seen */}
+                {ready ? (
+                  <Counter value={s.value} decimals={s.decimals} prefix={s.prefix} suffix={s.suffix} />
+                ) : (
+                  <span className="opacity-0">0</span>
+                )}
               </dd>
               <dt className="mt-2 max-w-[16rem] text-xs leading-snug text-bone-mute">{s.label}</dt>
             </div>

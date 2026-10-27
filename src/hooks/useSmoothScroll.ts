@@ -5,13 +5,14 @@ import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 /**
  * Sets up Lenis smooth-scroll for the "premium" scroll feel. In-page anchor
  * links glide through Lenis too, landing just under the floating nav.
- * Skipped entirely under prefers-reduced-motion, per accessibility rules.
+ * Skipped entirely under prefers-reduced-motion, per accessibility rules,
+ * and held off until `enabled` (i.e. the intro screen has lifted).
  */
-export function useSmoothScroll() {
+export function useSmoothScroll(enabled = true) {
   const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion || !enabled) return;
 
     const lenis = new Lenis({
       duration: 1.15,
@@ -31,5 +32,5 @@ export function useSmoothScroll() {
       cancelAnimationFrame(rafId);
       lenis.destroy();
     };
-  }, [reducedMotion]);
+  }, [reducedMotion, enabled]);
 }
