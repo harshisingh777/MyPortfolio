@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 /**
- * A small circle that follows the pointer and morphs into a larger
- * label-bearing shape when hovering elements marked with
- * `data-cursor-hover` (optionally `data-cursor-label="View"`).
+ * A crosshair-style dot that follows the pointer and opens into a labelled
+ * ring when hovering elements marked with `data-cursor-hover`
+ * (optionally `data-cursor-label="View"`).
  *
  * Fine-pointer devices only — see the `cursor: none` rule in index.css,
  * which is scoped the same way, so touch devices keep their native cursor.
@@ -16,8 +16,8 @@ export default function CustomCursor() {
 
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
-  const springX = useSpring(x, { stiffness: 500, damping: 40, mass: 0.4 });
-  const springY = useSpring(y, { stiffness: 500, damping: 40, mass: 0.4 });
+  const springX = useSpring(x, { stiffness: 520, damping: 40, mass: 0.35 });
+  const springY = useSpring(y, { stiffness: 520, damping: 40, mass: 0.35 });
 
   useEffect(() => {
     const query = window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -37,7 +37,7 @@ export default function CustomCursor() {
 
     const handleOver = (e: MouseEvent) => {
       const target = (e.target as HTMLElement).closest<HTMLElement>(
-        "[data-cursor-hover]"
+        "[data-cursor-hover], a, button, [role='tab']"
       );
       setHovering(!!target);
       setLabel(target?.dataset.cursorLabel ?? null);
@@ -53,28 +53,35 @@ export default function CustomCursor() {
 
   if (!enabled) return null;
 
+  const size = label ? 76 : hovering ? 40 : 10;
+
   return (
-    <motion.div
-      aria-hidden="true"
-      className="pointer-events-none fixed left-0 top-0 z-[999] flex items-center justify-center
-                 rounded-full mix-blend-difference bg-white"
-      style={{
-        x: springX,
-        y: springY,
-        translateX: "-50%",
-        translateY: "-50%",
-      }}
-      animate={{
-        width: hovering ? 72 : 14,
-        height: hovering ? 72 : 14,
-      }}
-      transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {label && (
-        <span className="font-body text-[10px] font-medium uppercase tracking-wide text-ink">
-          {label}
-        </span>
-      )}
-    </motion.div>
+    <>
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none fixed left-0 top-0 z-[999] flex items-center justify-center rounded-full"
+        style={{ x: springX, y: springY, translateX: "-50%", translateY: "-50%" }}
+        animate={{
+          width: size,
+          height: size,
+          backgroundColor: hovering && !label ? "rgba(210,245,60,0)" : "#D2F53C",
+        }}
+        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+      >
+        {label && (
+          <span className="font-mono text-[10px] font-medium uppercase tracking-wider text-night">
+            {label}
+          </span>
+        )}
+      </motion.div>
+      {/* the outer ring border is drawn separately so it can stay crisp */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none fixed left-0 top-0 z-[998] rounded-full border border-signal"
+        style={{ x: springX, y: springY, translateX: "-50%", translateY: "-50%" }}
+        animate={{ width: size, height: size, opacity: hovering && !label ? 1 : 0 }}
+        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+      />
+    </>
   );
 }

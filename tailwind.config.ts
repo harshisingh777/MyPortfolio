@@ -1,9 +1,9 @@
 import type { Config } from "tailwindcss";
 
 // ---------------------------------------------------------------------------
-// DESIGN TOKENS — "Bold Editorial" direction
-// White/near-white base, deep coral + cobalt as the two accent colors,
-// ink black reserved for headline type and high-contrast CTAs.
+// DESIGN TOKENS — "Lab Notebook, after dark"
+// Near-black graph-paper canvas, bone-white type, one chartreuse "signal"
+// accent for anything that matters, and a warm ember for secondary data.
 // ---------------------------------------------------------------------------
 
 export default {
@@ -11,59 +11,49 @@ export default {
   theme: {
     extend: {
       colors: {
-        base: "#FFFFFF",
-        paper: "#FAFAF9", // near-white page background
-        clay: "#F2F0EB", // warm neutral used under clay elements
-        ink: "#111111", // primary text / high-contrast CTA
-        coral: {
-          DEFAULT: "#FF5A5F",
-          dim: "#E14448",
+        night: {
+          DEFAULT: "#0B0B0C", // page
+          900: "#0F0F11",
+          800: "#141416", // surfaces
+          700: "#1B1B1E",
+          600: "#26262A",
         },
-        cobalt: {
-          DEFAULT: "#0057FF",
-          dim: "#0044CC",
+        bone: {
+          DEFAULT: "#ECE8DF", // primary text
+          dim: "#A9A59C",
+          mute: "#6E6B65",
         },
+        signal: {
+          DEFAULT: "#D2F53C", // chartreuse accent
+          dim: "#A9C62B",
+        },
+        ember: "#FF7A45",
+        line: "rgba(236,232,223,0.09)",
       },
       fontFamily: {
-        display: ["'Bricolage Grotesque'", "sans-serif"],
-        body: ["'General Sans'", "sans-serif"],
+        serif: ["'Instrument Serif'", "Georgia", "serif"],
+        sans: ["'Geist'", "system-ui", "sans-serif"],
+        mono: ["'Geist Mono'", "ui-monospace", "monospace"],
       },
-      boxShadow: {
-        // Claymorphism: soft inflated shadows, light top-left / dark bottom-right
-        clay: "7px 7px 14px rgba(17,17,17,0.10), -6px -6px 14px rgba(255,255,255,0.85)",
-        "clay-sm": "4px 4px 9px rgba(17,17,17,0.09), -3px -3px 9px rgba(255,255,255,0.8)",
-        "clay-lg": "12px 12px 28px rgba(17,17,17,0.12), -10px -10px 24px rgba(255,255,255,0.9)",
-        "clay-pressed": "inset 4px 4px 9px rgba(17,17,17,0.14), inset -3px -3px 8px rgba(255,255,255,0.7)",
-        "clay-coral": "7px 7px 18px rgba(255,90,95,0.28), -6px -6px 14px rgba(255,255,255,0.7)",
-        glass: "0 8px 32px rgba(17,17,17,0.08)",
-      },
-      backdropBlur: {
-        xs: "2px",
+      letterSpacing: {
+        label: "0.18em",
       },
       animation: {
-        "blob-drift-1": "blobDrift1 38s ease-in-out infinite",
-        "blob-drift-2": "blobDrift2 44s ease-in-out infinite",
-        "blob-drift-3": "blobDrift3 32s ease-in-out infinite",
-        "bounce-slow": "bounceSlow 2.2s ease-in-out infinite",
+        marquee: "marquee 38s linear infinite",
+        pulseDot: "pulseDot 2.4s ease-in-out infinite",
+        blink: "blink 1.1s steps(2, start) infinite",
       },
       keyframes: {
-        blobDrift1: {
-          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
-          "33%": { transform: "translate(6%, 8%) scale(1.08)" },
-          "66%": { transform: "translate(-4%, 5%) scale(0.96)" },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
         },
-        blobDrift2: {
-          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
-          "40%": { transform: "translate(-7%, -6%) scale(1.05)" },
-          "70%": { transform: "translate(5%, -3%) scale(0.94)" },
+        pulseDot: {
+          "0%, 100%": { opacity: "1", transform: "scale(1)" },
+          "50%": { opacity: "0.35", transform: "scale(0.8)" },
         },
-        blobDrift3: {
-          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
-          "50%": { transform: "translate(4%, -7%) scale(1.1)" },
-        },
-        bounceSlow: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(6px)" },
+        blink: {
+          to: { visibility: "hidden" },
         },
       },
     },

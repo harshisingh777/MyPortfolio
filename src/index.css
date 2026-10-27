@@ -4,60 +4,87 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    background: #0b0b0c;
+  }
+
+  /* Lenis drives smooth scrolling; native smooth-scroll would fight it. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
   }
 
   body {
-    @apply bg-paper text-ink font-body antialiased;
+    @apply bg-night font-sans text-bone antialiased;
     font-size: 16px;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4 {
-    @apply font-display;
+    font-feature-settings: "ss01", "cv11";
   }
 
   ::selection {
-    background-color: #ff5a5f;
-    color: #ffffff;
+    background-color: #d2f53c;
+    color: #0b0b0c;
   }
 
   /* Visible keyboard focus everywhere — accessibility floor */
   :focus-visible {
-    outline: 2px solid #0057ff;
+    outline: 2px solid #d2f53c;
     outline-offset: 3px;
-    border-radius: 4px;
+    border-radius: 6px;
+  }
+
+  section[id] {
+    scroll-margin-top: 80px;
   }
 }
 
 @layer components {
-  .glass-panel {
-    @apply bg-white/80 backdrop-blur-xl border border-white/60 shadow-glass;
+  /* Faint graph-paper grid — the "lab notebook" canvas */
+  .graph-paper {
+    background-image:
+      linear-gradient(to right, rgba(236, 232, 223, 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(236, 232, 223, 0.045) 1px, transparent 1px);
+    background-size: 56px 56px;
   }
 
-  .glass-nav {
-    @apply bg-white/70 backdrop-blur-xl border border-white/50;
+  .label {
+    @apply font-mono text-[11px] uppercase tracking-label text-bone-mute;
   }
 
-  .eyebrow {
-    @apply font-body text-xs tracking-[0.2em] uppercase text-ink/50 font-medium;
+  .hairline {
+    @apply border-line;
   }
 
-  .section-number {
-    @apply font-display text-coral/70 text-sm tracking-[0.15em];
+  .chip {
+    @apply inline-flex items-center rounded-full border border-line px-3 py-1 font-mono text-[11px] text-bone-dim;
   }
+}
+
+/* Film grain — sits above everything, never intercepts the pointer */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Hide native cursor for the custom cursor effect on fine-pointer devices only */
 @media (hover: hover) and (pointer: fine) {
-  body {
-    cursor: none;
-  }
+  body,
   a,
   button,
-  [role="button"] {
+  [role="button"],
+  [role="tab"] {
     cursor: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
   }
 }
